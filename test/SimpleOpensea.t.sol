@@ -61,4 +61,25 @@ contract OpenseaTest is Test {
         // assertEq(creator, address(this));
         // assertEq(askPrice, 1 ether);
     }
+
+    function testNonOwnerCannotCreateSale() public {
+        assertEq(nft.ownerOf(nftId), address(this));
+
+        vm.prank(address(user));
+        vm.expectRevert("WRONG_FROM");
+
+        opensea.list(nft, nftId, 1 ether);
+
+        assertEq(nft.ownerOf(nftId), address(this));
+    }
+
+    function testCannotListWhenTokenIsNotApproved() public {
+        assertEq(nft.ownerOf(nftId), address(this));
+        nft.setApprovalForAll(address(opensea), false);
+
+        vm.expectRevert("NOT_AUTHORIZED");
+        opensea.list(nft, nftId, 1 ether);
+
+        assertEq(nft.ownerOf(nftId), address(this));
+    }
 }
