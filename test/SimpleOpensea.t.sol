@@ -118,4 +118,9 @@ contract OpenseaTest is Test {
         (, , address newCreator, ) = opensea.getListing(listingId);
         assertEq(newCreator, address(this));
     }
+
+    function testCannotBuyNonExistingValue() public {
+        vm.expectRevert(abi.encodeWithSignature("Opensea__ListingNotFound"));
+        opensea.buyListing(1);
+    }
 }
