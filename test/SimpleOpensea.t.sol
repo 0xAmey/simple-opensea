@@ -133,5 +133,5 @@ contract OpenseaTest is Test {
         assertEq(nft.ownerOf(nftId), address(opensea));
     }
 
-    function testCanBuyListing() public {
+    function testCanBuyListing() public {}
 }
