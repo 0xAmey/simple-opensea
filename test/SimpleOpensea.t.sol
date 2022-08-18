@@ -83,5 +83,21 @@ contract OpenseaTest is Test {
         assertEq(nft.ownerOf(nftId), address(this));
     }
 
-    function testCanCancelSale() public {}
+    function testCanCancelSale() public {
+        uint256 listingId = opensea.list(nft, nftId, 1 ether);
+        (, , address creator, ) = opensea.getListing(listingId);
+        assertEq(creator, address(this));
+        assertEq(nft.ownerOf(nftId), address(opensea));
+
+        vm.expectEmit(true, true, false, true);
+        emit ListingRemoved({
+            opensea.Listing({
+                tokenContract: nft,
+                tokenId: nftId,
+                askPrice: 1 ether,
+                creator: address(this)
+            })
+        });
+        opensea.cancelListing(listingId);
+    }
 }
