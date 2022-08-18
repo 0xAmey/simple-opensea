@@ -82,4 +82,6 @@ contract OpenseaTest is Test {
 
         assertEq(nft.ownerOf(nftId), address(this));
     }
+
+    function testCanCancelSale() public {}
 }
