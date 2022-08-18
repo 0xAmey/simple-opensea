@@ -120,7 +120,7 @@ contract OpenseaTest is Test {
     }
 
     function testCannotBuyNonExistingValue() public {
-        vm.expectRevert(abi.encodeWithSignature("Opensea__ListingNotFound"));
+        vm.expectRevert(abi.encodeWithSignature("Opensea__ListingNotFound()"));
         opensea.buyListing(1);
     }
 }
