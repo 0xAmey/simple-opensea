@@ -103,4 +103,19 @@ contract OpenseaTest is Test {
         (, , address newCreator, ) = opensea.getListing(listingId);
         assertEq(newCreator, address(0));
     }
+
+    function testNonOwnerCannotCancelSale() public {
+        uint256 listingId = opensea.list(nft, nftId, 1 ether);
+        (, , address creator, ) = opensea.getListing(listingId);
+        assertEq(creator, address(this));
+
+        vm.prank(user);
+        vm.expectRevert(abi.encodeWithSignature("Opensea__Unauthorized()"));
+        opensea.cancelListing(listingId);
+
+        assertEq(nft.ownerOf(nftId), address(opensea));
+
+        (, , address newCreator, ) = opensea.getListing(listingId);
+        assertEq(newCreator, address(this));
+    }
 }
