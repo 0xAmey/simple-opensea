@@ -90,14 +90,17 @@ contract OpenseaTest is Test {
         assertEq(nft.ownerOf(nftId), address(opensea));
 
         vm.expectEmit(true, true, false, true);
-        emit ListingRemoved({
-            opensea.Listing({
+        emit ListingRemoved(
+            Opensea.Listing({
                 tokenContract: nft,
                 tokenId: nftId,
                 askPrice: 1 ether,
                 creator: address(this)
             })
-        });
+        );
         opensea.cancelListing(listingId);
+
+        (, , address newCreator, ) = opensea.getListing(listingId);
+        assertEq(newCreator, address(0));
     }
 }
