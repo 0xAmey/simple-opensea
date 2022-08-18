@@ -123,4 +123,15 @@ contract OpenseaTest is Test {
         vm.expectRevert(abi.encodeWithSignature("Opensea__ListingNotFound()"));
         opensea.buyListing(1);
     }
+
+    function testCannotBuyWithWrongValue() public {
+        uint256 listingId = opensea.list(nft, nftId, 1 ether);
+
+        vm.expectRevert(abi.encodeWithSignature("Opensea__WrongValueSent()"));
+        opensea.buyListing{value: 0.1 ether}(listingId);
+
+        assertEq(nft.ownerOf(nftId), address(opensea));
+    }
+
+    function testCanBuyListing() public {
 }
